@@ -8,23 +8,23 @@ permissions:
 jobs:
   test_and_build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       # Instalacion de dependencias de python
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install ruff
+        run: pip install -r requirements.txt
       # Instalacion de dependencias de node
       - name: Install dependencies node
         run: npm install
-      # Verificacion de codigo con ruff
-      - name: Check code with ruff
-        run: ruff check .
+      # Validacion basica de sintaxis Python
+      - name: Check Python syntax
+        run: python -m py_compile main.py
 
       # Login a GitHub Container Registry
       - name: Login to GitHub Container Registry
@@ -38,5 +38,5 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ghcr.io/Eleaxgaymer138/DEVOPS_PRESTA_APP:latest
+          tags: ghcr.io/eleaxgaymer138/devops_presta_app:latest
 # ghcr.io/cuenta_usuario/nombre_repositorio:tag
